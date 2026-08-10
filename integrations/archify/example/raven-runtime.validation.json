@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "deliver",
+  "type": "architecture",
+  "input": "raven-runtime.architecture.json",
+  "output": "raven-runtime.html",
+  "specification": {
+    "sha256": "10ebe697dab06200cdf6dd12ede6fe94162c114940702355b347919ee8bb3833",
+    "bytes": 8891
+  },
+  "artifact": {
+    "sha256": "ce7d915f3f628aaf52067f8a1a6d6f75894425b35e33ee38beb50c9e032b8ece",
+    "bytes": 620665
+  },
+  "validation": {
+    "checksPassed": 9,
+    "checkCount": 9,
+    "compositionProfile": "showcase",
+    "compositionStatus": "pass",
+    "errors": 0,
+    "warnings": 0
+  },
+  "evidence": {
+    "verified": true,
+    "repository": "https://github.com/EverMind-AI/Raven",
+    "revision": "52c76a56020e295a514dd4717fe0d20b0ae7956c",
+    "references": 18
+  },
+  "visualReview": {
+    "status": "passed",
+    "correctionRounds": 1,
+    "preview": "raven-runtime-preview.png",
+    "note": "The offline preview was inspected after deterministic delivery; all nodes, labels, boundaries, and routes are visible without overlap."
+  }
+}

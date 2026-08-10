@@ -1,0 +1,244 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Raven Runtime Architecture",
+    "subtitle": "From user channels to the agent loop, tools, memory, and model providers",
+    "output": "raven-runtime.html",
+    "animation": "trace",
+    "visual_preset": "signal-flow",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/EverMind-AI/Raven",
+      "revision": "52c76a56020e295a514dd4717fe0d20b0ae7956c"
+    },
+    "views": [
+      {
+        "id": "turn-path",
+        "label": "Primary turn path",
+        "focus": ["user", "channels", "session", "agent-loop", "provider", "models"],
+        "note": "Follow one request from a channel through Raven's agent loop to a configured model provider."
+      },
+      {
+        "id": "context-memory",
+        "label": "Context and memory",
+        "focus": ["session", "context", "agent-loop", "memory", "workspace"],
+        "note": "See how session state, curated context, memory, and local workspace data support a turn."
+      },
+      {
+        "id": "action-path",
+        "label": "Tools and skills",
+        "focus": ["agent-loop", "tools", "workspace", "evolver"],
+        "note": "Inspect Raven's action path across built-in tools, MCP wrappers, skills, and local files."
+      },
+      {
+        "id": "proactive-path",
+        "label": "Proactive execution",
+        "focus": ["proactive", "agent-loop", "tools"],
+        "note": "Raven can schedule or discover work and feed it into the same governed agent runtime."
+      }
+    ],
+    "legend": {
+      "mode": "auto",
+      "entries": {
+        "external": { "label": "Users & external services" },
+        "frontend": { "label": "Interaction layer" },
+        "backend": { "label": "Raven runtime" },
+        "database": { "label": "Local state" },
+        "cloud": { "label": "Model provider" }
+      }
+    }
+  },
+  "components": [
+    {
+      "id": "user",
+      "type": "external",
+      "label": "User / Client",
+      "sublabel": "CLI, chat, or app",
+      "pos": [40, 310],
+      "size": [130, 64]
+    },
+    {
+      "id": "channels",
+      "type": "frontend",
+      "label": "Channel Layer",
+      "sublabel": "Inbound + outbound adapters",
+      "tag": "multi-channel",
+      "pos": [230, 310],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/channels/manager.py", "line": 47, "label": "ChannelManager" },
+        { "path": "raven/channels/base.py", "line": 16, "label": "ChannelBase" }
+      ]
+    },
+    {
+      "id": "session",
+      "type": "backend",
+      "label": "Session Manager",
+      "sublabel": "Conversation + turn state",
+      "pos": [440, 310],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/session/manager.py", "line": 137, "label": "SessionManager" }
+      ]
+    },
+    {
+      "id": "agent-loop",
+      "type": "backend",
+      "label": "Agent Loop",
+      "sublabel": "Reason, act, observe",
+      "tag": "runtime core",
+      "pos": [650, 310],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/agent/loop/main.py", "line": 255, "label": "AgentLoop" },
+        { "path": "raven/agent/spine_runner.py", "line": 30, "label": "SpineRunner" }
+      ]
+    },
+    {
+      "id": "provider",
+      "type": "cloud",
+      "label": "Provider Layer",
+      "sublabel": "Routing, stream, retry",
+      "pos": [860, 310],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/providers/base.py", "line": 145, "label": "LLMProvider" },
+        { "path": "raven/providers/litellm_provider.py", "line": 68, "label": "LiteLLMProvider" }
+      ]
+    },
+    {
+      "id": "models",
+      "type": "external",
+      "label": "Model APIs",
+      "sublabel": "Configured providers",
+      "pos": [1070, 310],
+      "size": [140, 64]
+    },
+    {
+      "id": "context",
+      "type": "backend",
+      "label": "Context Engine",
+      "sublabel": "Assemble + curate context",
+      "pos": [650, 100],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/context_engine/base.py", "line": 120, "label": "ContextEngine" },
+        { "path": "raven/context_engine/assembler.py", "line": 42, "label": "ContextAssembler" }
+      ]
+    },
+    {
+      "id": "proactive",
+      "type": "backend",
+      "label": "Proactive Engine",
+      "sublabel": "Sentinel + schedules",
+      "pos": [440, 100],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/proactive_engine/sentinel/planner.py", "line": 137, "label": "ProactivePlanner" },
+        { "path": "raven/proactive_engine/schedulers/cron/service.py", "line": 764, "label": "CronService" }
+      ]
+    },
+    {
+      "id": "tools",
+      "type": "backend",
+      "label": "Tools, MCP & Skills",
+      "sublabel": "Discover + execute actions",
+      "pos": [650, 520],
+      "size": [160, 64],
+      "sources": [
+        { "path": "raven/agent/tools/registry.py", "line": 10, "label": "ToolRegistry" },
+        { "path": "raven/agent/tools/mcp.py", "line": 19, "label": "MCPToolWrapper" },
+        { "path": "raven/agent/tools/skill_hub.py", "line": 123, "label": "UseSkillTool" }
+      ]
+    },
+    {
+      "id": "memory",
+      "type": "database",
+      "label": "Memory Engine",
+      "sublabel": "Pluggable memory backend",
+      "pos": [440, 520],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/memory_engine/backend.py", "line": 85, "label": "MemoryBackend" },
+        { "path": "raven/memory_engine/consolidate/consolidator.py", "line": 1686, "label": "MemoryConsolidator" }
+      ]
+    },
+    {
+      "id": "evolver",
+      "type": "backend",
+      "label": "Evolver",
+      "sublabel": "Evaluate + improve skills",
+      "pos": [230, 520],
+      "size": [150, 64],
+      "sources": [
+        { "path": "raven/evolver/orchestrator/loop.py", "line": 301, "label": "Orchestrator loop" },
+        { "path": "raven/evolver/orchestrator/gates/pipeline.py", "line": 54, "label": "Evaluation gates" }
+      ]
+    },
+    {
+      "id": "workspace",
+      "type": "database",
+      "label": "Local Workspace",
+      "sublabel": "Files, skills, artifacts",
+      "pos": [860, 520],
+      "size": [150, 64]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Raven runtime",
+      "wraps": ["channels", "session", "agent-loop", "provider", "context", "proactive", "tools", "memory", "evolver"]
+    }
+  ],
+  "connections": [
+    { "id": "user-request", "from": "user", "to": "channels", "label": "message", "variant": "emphasis" },
+    { "id": "channel-dispatch", "from": "channels", "to": "session", "label": "normalize" },
+    { "id": "session-turn", "from": "session", "to": "agent-loop", "label": "turn" },
+    { "id": "model-request", "from": "agent-loop", "to": "provider", "label": "inference", "variant": "emphasis" },
+    { "id": "provider-model", "from": "provider", "to": "models" },
+    { "id": "assemble-context", "from": "context", "to": "agent-loop", "fromSide": "bottom", "toSide": "top" },
+    { "id": "schedule-work", "from": "proactive", "to": "agent-loop", "label": "planned task", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "via": [[515, 220], [620, 220], [620, 260], [725, 260]] },
+    { "id": "invoke-tools", "from": "agent-loop", "to": "tools", "variant": "emphasis", "fromSide": "bottom", "toSide": "top" },
+    { "id": "memory-write", "from": "agent-loop", "to": "memory", "variant": "dashed", "fromSide": "bottom", "toSide": "top", "via": [[725, 430], [620, 430], [620, 490], [515, 490]] },
+    { "id": "tool-files", "from": "tools", "to": "workspace" },
+    { "id": "evolve-skills", "from": "evolver", "to": "tools", "variant": "dashed", "fromSide": "bottom", "toSide": "bottom", "via": [[305, 630], [730, 630]] }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "One runtime, many surfaces",
+      "items": [
+        "Channel adapters normalize messages before the agent turn",
+        "Session state keeps the conversation and turn lifecycle coherent"
+      ]
+    },
+    {
+      "dot": "violet",
+      "title": "Agentic core",
+      "items": [
+        "The Agent Loop coordinates model calls, context, and actions",
+        "Providers abstract routing, streaming, and retry behavior",
+        "Tools combine built-ins, MCP integrations, and reusable skills"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "State and improvement",
+      "items": [
+        "The Context Engine assembles relevant working context",
+        "Memory and workspace artifacts persist useful state",
+        "Proactive Engine and Evolver extend work beyond a single reactive turn"
+      ]
+    },
+    {
+      "dot": "slate",
+      "title": "Evidence scope",
+      "items": [
+        "Derived from the locally installed Raven 0.1.10 Python package",
+        "Source links point to inspected implementation files; no repository commit was available"
+      ]
+    }
+  ]
+}
