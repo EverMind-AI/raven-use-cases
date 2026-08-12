@@ -78,12 +78,11 @@ Every entry must declare one of the following states:
 7. Do not include private data, credentials, or material without redistribution rights.
 8. Prefer concise, reproducible examples over product claims.
 
-## Initial integrations
+## Initial integration
 
-- [Raven × OpenAI](integrations/openai/)
 - [Raven × RPA](integrations/rpa/)
 
-These pages are initial placeholders and will be expanded with verified workflows, setup instructions, and examples.
+This page is an initial placeholder and will be expanded with verified workflows, setup instructions, and examples.
 
 ## Licensing and attribution
 

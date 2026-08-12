@@ -6,6 +6,5 @@ Each integration must use its own directory and follow [`templates/integration.m
 
 ## Current entries
 
-- [Raven × OpenAI](openai/)
 - [Raven × Archify](archify/)
 - [Raven × RPA](rpa/)
